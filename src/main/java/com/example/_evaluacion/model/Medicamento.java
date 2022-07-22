@@ -47,7 +47,7 @@ public class Medicamento implements Serializable {
     private String tipo;
     @Basic(optional = false)
     @Column(name = "cantidad")
-    private String cantidad;
+    private Integer cantidad;
     @Basic(optional = false)
     @Column(name = "distribuidor")
     private String distribuidor;
@@ -81,13 +81,15 @@ public class Medicamento implements Serializable {
         this.tipo = tipo;
     }
 
-    public String getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(String cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
+
+    
 
     public String getDistribuidor() {
         return distribuidor;

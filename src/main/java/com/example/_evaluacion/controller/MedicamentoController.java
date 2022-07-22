@@ -35,8 +35,42 @@ public class MedicamentoController {
     }
     
     @PostMapping("/crear")
-    public ResponseEntity<Medicamento> crear(@RequestBody Medicamento u){
-    return new ResponseEntity<>(medicamentoService.crear(u),HttpStatus.CREATED);
+    public String crear(@RequestBody Medicamento u){
+        String mensaje="";
+        String farmacia=u.getSucursal();
+        String distri=u.getDistribuidor();
+        
+            if (u.getCantidad()>0) {
+            if (u.getDistribuidor().equals("") || u.getSucursal().equals("") || u.getNombre().equals("") || u.getTipo().equals("") || String.valueOf(u.getCantidad()).equals("") ) {
+                 mensaje="No pueden haber campos vacios, porfavor llene todos los datos";
+            } else {
+                if (farmacia.equalsIgnoreCase("PRINCIPAL") || farmacia.equalsIgnoreCase("SECUNDARIA")) {
+                    if (distri.equalsIgnoreCase("COFARMA") || distri.equalsIgnoreCase("EMPSEPHAR") || distri.equalsIgnoreCase("CEMEFAR")  ) {
+                        medicamentoService.crear(u);
+                   String sucursal="";
+                   if (u.getSucursal().equalsIgnoreCase("principal")) {
+                   sucursal="Octavio Chacón Moscoso";   
+                    
+                } else {
+                       sucursal="AV de la Independencia";
+                }
+                   mensaje="*PEDIDO ENVIADO CORRECTAMENTE*| Pedido al distribuidor "+u.getDistribuidor()+" | "+ u.getCantidad()+" unidades de "+u.getTipo()+" "+u.getNombre()+" | Para la farmacia situada en "+sucursal;
+                    } else {
+                        mensaje ="Distribuidor no reconocido";
+                    }
+                }else{
+                    mensaje ="La sucursal debe ser entre PRINCIPAL Y SECUNDARIA";
+                    
+                }
+
+            }
+        } else {
+            mensaje="La cantidad debe ser positiva y mayor a 0";
+        }
+        
+        
+        
+    return mensaje;
 }
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Medicamento> eliminar(@PathVariable  Long id){
